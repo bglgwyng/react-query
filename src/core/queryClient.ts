@@ -589,16 +589,18 @@ export class QueryClient {
     TError,
     TData,
     TQueryData,
-    TQueryKey extends QueryKey
+    TQueryKey extends QueryKey,
+    TSuspended extends boolean = boolean
   >(
     options?: QueryObserverOptions<
       TQueryFnData,
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >
-  ): QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey> {
+  ): QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey, TSuspended> {
     if (options?._defaulted) {
       return options
     }
@@ -613,7 +615,8 @@ export class QueryClient {
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >
 
     if (!defaultedOptions.queryHash && defaultedOptions.queryKey) {
@@ -631,16 +634,18 @@ export class QueryClient {
     TError,
     TData,
     TQueryData,
-    TQueryKey extends QueryKey
+    TQueryKey extends QueryKey,
+    TSuspended extends boolean = boolean
   >(
     options?: QueryObserverOptions<
       TQueryFnData,
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >
-  ): QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey> {
+  ): QueryObserverOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey, TSuspended> {
     return this.defaultQueryOptions(options)
   }
 

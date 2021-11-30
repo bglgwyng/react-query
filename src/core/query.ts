@@ -335,7 +335,7 @@ export class Query<
     }
   }
 
-  removeObserver(observer: QueryObserver<any, any, any, any, any>): void {
+  removeObserver(observer: QueryObserver<any, any, any, any, any, any>): void {
     if (this.observers.indexOf(observer) !== -1) {
       this.observers = this.observers.filter(x => x !== observer)
 

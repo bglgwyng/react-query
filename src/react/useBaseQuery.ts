@@ -13,14 +13,16 @@ export function useBaseQuery<
   TError,
   TData,
   TQueryData,
-  TQueryKey extends QueryKey
+  TQueryKey extends QueryKey,
+  TSuspended extends boolean = boolean
 >(
   options: UseBaseQueryOptions<
     TQueryFnData,
     TError,
     TData,
     TQueryData,
-    TQueryKey
+    TQueryKey,
+    TSuspended
   >,
   Observer: typeof QueryObserver
 ) {
@@ -76,7 +78,7 @@ export function useBaseQuery<
 
   const [observer] = React.useState(
     () =>
-      new Observer<TQueryFnData, TError, TData, TQueryData, TQueryKey>(
+      new Observer<TQueryFnData, TError, TData, TQueryData, TQueryKey, TSuspended>(
         queryClient,
         defaultedOptions
       )
@@ -136,7 +138,7 @@ export function useBaseQuery<
     shouldThrowError(
       defaultedOptions.suspense,
       defaultedOptions.useErrorBoundary,
-      result.error
+      result.error as any
     )
   ) {
     throw result.error

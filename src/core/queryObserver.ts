@@ -45,14 +45,16 @@ export class QueryObserver<
   TError = unknown,
   TData = TQueryFnData,
   TQueryData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
+  TQueryKey extends QueryKey = QueryKey,
+  TSuspended extends boolean = boolean
 > extends Subscribable<QueryObserverListener<TData, TError>> {
   options: QueryObserverOptions<
     TQueryFnData,
     TError,
     TData,
     TQueryData,
-    TQueryKey
+    TQueryKey,
+    TSuspended
   >
 
   private client: QueryClient
@@ -65,7 +67,8 @@ export class QueryObserver<
     TError,
     TData,
     TQueryData,
-    TQueryKey
+    TQueryKey,
+    TSuspended
   >
   private previousQueryResult?: QueryObserverResult<TData, TError>
   private previousSelectError: Error | null
@@ -81,7 +84,8 @@ export class QueryObserver<
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >
   ) {
     super()
@@ -137,7 +141,8 @@ export class QueryObserver<
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >,
     notifyOptions?: NotifyOptions
   ): void {
@@ -207,9 +212,10 @@ export class QueryObserver<
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >
-  ): QueryObserverResult<TData, TError> {
+  ): QueryObserverResult<TData, TError, TSuspended> {
     const defaultedOptions = this.client.defaultQueryObserverOptions(options)
 
     const query = this.client
@@ -238,10 +244,11 @@ export class QueryObserver<
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >
-  ): QueryObserverResult<TData, TError> {
-    const trackedResult = {} as QueryObserverResult<TData, TError>
+  ): QueryObserverResult<TData, TError, TSuspended> {
+    const trackedResult = {} as QueryObserverResult<TData, TError, TSuspended>
 
     const trackProp = (key: keyof QueryObserverResult) => {
       if (!this.trackedProps.includes(key)) {
@@ -307,9 +314,10 @@ export class QueryObserver<
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >
-  ): Promise<QueryObserverResult<TData, TError>> {
+  ): Promise<QueryObserverResult<TData, TError, TSuspended>> {
     const defaultedOptions = this.client.defaultQueryObserverOptions(options)
 
     const query = this.client
@@ -439,9 +447,10 @@ export class QueryObserver<
       TError,
       TData,
       TQueryData,
-      TQueryKey
+      TQueryKey,
+      TSuspended
     >
-  ): QueryObserverResult<TData, TError> {
+  ): QueryObserverResult<TData, TError, TSuspended> {
     const prevQuery = this.currentQuery
     const prevOptions = this.options
     const prevResult = this.currentResult
@@ -593,7 +602,7 @@ export class QueryObserver<
       remove: this.remove,
     }
 
-    return result as QueryObserverResult<TData, TError>
+    return result as QueryObserverResult<TData, TError, TSuspended>
   }
 
   private shouldNotifyListeners(
@@ -772,7 +781,7 @@ function shouldFetchOnReconnect(
 
 function shouldFetchOnWindowFocus(
   query: Query<any, any, any, any>,
-  options: QueryObserverOptions<any, any, any, any, any>
+  options: QueryObserverOptions<any, any, any, any, any, any>
 ): boolean {
   return (
     options.enabled !== false &&

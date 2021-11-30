@@ -17,26 +17,30 @@ export interface UseBaseQueryOptions<
   TError = unknown,
   TData = TQueryFnData,
   TQueryData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
+  TQueryKey extends QueryKey = QueryKey,
+  TSuspended extends boolean = boolean
 > extends QueryObserverOptions<
     TQueryFnData,
     TError,
     TData,
     TQueryData,
-    TQueryKey
+    TQueryKey,
+    TSuspended
   > {}
 
 export interface UseQueryOptions<
   TQueryFnData = unknown,
   TError = unknown,
   TData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
+  TQueryKey extends QueryKey = QueryKey,
+  TSuspended extends boolean = boolean
 > extends UseBaseQueryOptions<
     TQueryFnData,
     TError,
     TData,
     TQueryFnData,
-    TQueryKey
+    TQueryKey,
+    TSuspended
   > {}
 
 export interface UseInfiniteQueryOptions<
@@ -55,13 +59,15 @@ export interface UseInfiniteQueryOptions<
 
 export type UseBaseQueryResult<
   TData = unknown,
-  TError = unknown
-> = QueryObserverResult<TData, TError>
+  TError = unknown,
+  TSuspended extends boolean = boolean
+> = QueryObserverResult<TData, TError, TSuspended>
 
 export type UseQueryResult<
   TData = unknown,
-  TError = unknown
-> = UseBaseQueryResult<TData, TError>
+  TError = unknown,
+  TSuspended extends boolean = boolean
+> = UseBaseQueryResult<TData, TError, TSuspended>
 
 export type UseInfiniteQueryResult<
   TData = unknown,

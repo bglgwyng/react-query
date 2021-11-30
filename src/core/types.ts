@@ -99,7 +99,8 @@ export interface QueryObserverOptions<
   TError = unknown,
   TData = TQueryFnData,
   TQueryData = TQueryFnData,
-  TQueryKey extends QueryKey = QueryKey
+  TQueryKey extends QueryKey = QueryKey,
+  TSuspended extends boolean = boolean
 > extends QueryOptions<TQueryFnData, TError, TQueryData, TQueryKey> {
   /**
    * Set this to `false` to disable automatic refetching when the query mounts or changes query keys.
@@ -194,7 +195,7 @@ export interface QueryObserverOptions<
    * and throw errors when `status === 'error'`.
    * Defaults to `false`.
    */
-  suspense?: boolean
+  suspense?: TSuspended
   /**
    * Set this to `true` to keep the previous `data` when fetching based on a new query key.
    * Defaults to `false`.
@@ -392,12 +393,21 @@ export interface QueryObserverSuccessResult<TData = unknown, TError = unknown>
   status: 'success'
 }
 
-export type QueryObserverResult<TData = unknown, TError = unknown> =
-  | QueryObserverIdleResult<TData, TError>
-  | QueryObserverLoadingErrorResult<TData, TError>
-  | QueryObserverLoadingResult<TData, TError>
+export type QueryObserverResult<TData = unknown, TError = unknown, TSuspended extends boolean = boolean> =
+  (TSuspended extends true 
+    ? never
+    : QueryObserverIdleResult<TData, TError>
+    | QueryObserverLoadingErrorResult<TData, TError>
+    | QueryObserverLoadingResult<TData, TError>   )
   | QueryObserverRefetchErrorResult<TData, TError>
   | QueryObserverSuccessResult<TData, TError>
+
+// export type QueryObserverResult<TData = unknown, TError = unknown, TSuspended = boolean> =
+// | QueryObserverIdleResult<TData, TError>
+// | QueryObserverLoadingErrorResult<TData, TError>
+// | QueryObserverLoadingResult<TData, TError>
+// | QueryObserverRefetchErrorResult<TData, TError>
+// | QueryObserverSuccessResult<TData, TError>
 
 export interface InfiniteQueryObserverBaseResult<
   TData = unknown,
